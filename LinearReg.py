@@ -2,7 +2,14 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def update_weights(size, price, weight, bias, learning_rate):
+def cost_function(radio, sales, weight, bias):
+    companies = len(radio)
+    total_error = 0.0
+    for i in range(companies):
+        total_error += (sales- (weight*radio + bias))**2
+    return total_error / companies
+
+def gradient_descent(size, price, weight, bias, learning_rate):
     weight_deriv = 0
     bias_deriv = 0
     len_data = size.shape[0]
@@ -10,22 +17,36 @@ def update_weights(size, price, weight, bias, learning_rate):
     weight_deriv += 2*(((((weight*size+bias)-price).T)*size.T).sum())
     bias_deriv += 2*((((weight*size+bias))-price).sum())
 
-    weight -=((weight_deriv / len_data) * learning_rate)
-    bias -=((bias_deriv / len_data) * learning_rate)
+    new_w = weight - ((weight_deriv / len_data) * learning_rate)
+    new_b = bias -((bias_deriv / len_data) * learning_rate)
 
-    return weight, bias
+    return new_w, new_b
 
-df = pd.read_csv("LR-heartdata.csv").head(210)
+def train(radio, sales, weight, bias, learning_rate, iters):
+    cost_history = []
+
+    for i in range(iters):
+        weight,bias = gradient_descent(radio, sales, weight, bias, learning_rate)
+
+        #Calculate cost for auditing purposes
+        cost = cost_function(radio, sales, weight, bias)
+        cost_history.append(cost)
+
+        # Log Progress
+        if i % 50 == 0:
+            print ("Iter = ", i, "Weight = ", weight, "Bias = ", bias)
+    return weight, bias, cost_history
+
+
+df = pd.read_csv("Salary_Data.csv").head(25)
 df.dropna(inplace= True)
 x = np.array([df.Size])
 y = np.array([df.Price])
 
-m,c = update_weights(x.T,y.T,0,200,0.0001)
-print(m)
-print(c)
+m,c,d = train(x.T,y.T,0,0,0.001,55000)
 hyp = m*x + c
 fig, ax1 = plt.subplots()
-ax1.set(title = "LR1V", xlabel =  "Size(m^2)", ylabel = "Price($)")
+ax1.set(title = "LR1V", xlabel =  "Year", ylabel = "Price($)")
 ax1.scatter(x,y, color = 'Red', marker="x")
 ax1.plot(x.T,hyp.T)
 plt.show()
