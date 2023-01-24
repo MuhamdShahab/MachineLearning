@@ -48,7 +48,7 @@ df.dropna(inplace= True)
 x = np.array([df.Size])
 y = np.array([df.Price])
 
-m,c,d = train(x.T,y.T,0,0,0.001,500)
+m,c,d = train(x.T,y.T,0,0,0.001,200)
 hyp = m*x + c
 fig, ax1 = plt.subplots()
 ax1.set(title = "LR1V", xlabel =  "Year", ylabel = "Price($)")
