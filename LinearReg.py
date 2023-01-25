@@ -15,7 +15,7 @@ def gradient_descent(size, price, weight, bias, learning_rate):
     len_data = size.shape[0]
 
     weight_deriv += (np.dot((weight*size+bias)-price,size.T).sum())
-    bias_deriv += (np.dot((weight*size+bias)-price,size.T).sum())
+    bias_deriv += ((weight*size+bias)-price).sum()
 
     #weight_deriv += 2*(((((weight*size+bias)-price).T)*size.T).sum())
     #bias_deriv += 2*((((weight*size+bias))-price).sum())
