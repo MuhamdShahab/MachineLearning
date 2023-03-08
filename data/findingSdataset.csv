@@ -1,0 +1,5 @@
+Weather,Tempreture,Humidity,Wind,Mood,Target
+Sunny,Warm,Normal,Normal,Same,Yes
+Sunny,Warm,High,Strong,Same,Yes
+Rainy,Cold,High,Normal,Change,No
+Sunny,Warm,High,Strong,Change,Yes
